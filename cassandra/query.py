@@ -86,9 +86,10 @@ def tuple_factory(colnames, rows):
 
 class PseudoNamedTupleRow(object):
     """
-    Helper class for pseudo_named_tuple_factory. Wraps a DefaultDict and
-    provides index- and attribute-based access to values, but otherwise does
-    not attempt to implement the full namedtuple interface.
+    Helper class for pseudo_named_tuple_factory. These objects provide an
+    __iter__ interface, as well as index- and attribute-based access to values,
+    but otherwise do not attempt to implement the full namedtuple or iterable
+    interface.
     """
     def __init__(self, ordered_dict):
         self._dict = ordered_dict
@@ -99,6 +100,13 @@ class PseudoNamedTupleRow(object):
 
     def __getitem__(self, idx):
         return self._tuple[idx]
+
+    def __iter__(self):
+        return iter(self._tuple)
+
+    def __repr__(self):
+        return '{t}({od})'.format(t=self.__class__.__name__,
+                                  od=self._dict)
 
 
 def pseudo_namedtuple_factory(colnames, rows):
